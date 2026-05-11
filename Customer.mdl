@@ -1,0 +1,102 @@
+{UTF-8}
+staff count = INTEG(hiring_rate - staff attrition flow, initial_staff)
+~ People
+~ |
+
+initial_staff = 3
+~ People
+~ |
+
+complaints = INTEG(new complaints rate - complaints resolution flow, initial_complaints)
+~ Count
+~ |
+
+initial_complaints = 7
+~ Count
+~ |
+
+response time = INTEG(response time increase rate - response time decay flow, 1)
+~ Hours
+~ |
+
+required mentoring workload = DELAY FIXED(hiring_rate * mentoring hours per hire, 3, 0)
+~ Mentoring Hours/Month
+~ |
+
+senior availability = MAX(0, 1 - (required mentoring workload / MAX(1, staff count * efficiency capacity)))
+~ Dimensionless
+~ |
+
+new complaints rate = response time * complaint sensitivity
+~ Complaints/Month
+~ |
+
+response time increase rate = response time * (1 - senior availability) * service impact factor
+~ Hours/Month
+~ |
+
+staff attrition flow = staff count * attrition rate
+~ People/Month
+~ |
+
+complaints resolution flow = staff count * resolution capacity
+~ Complaints/Month
+~ |
+
+response time decay flow = response time * decay rate
+~ Hours/Month
+~ |
+
+mentoring hours per hire = 2
+~ Hours/Person
+~ |
+
+complaint sensitivity = 0.5
+~ Complaints/Hour
+~ |
+
+attrition rate = 0.05
+~ 1/Month
+~ |
+
+resolution capacity = 0.2
+~ Complaints/Person/Month
+~ |
+
+decay rate = 0.1
+~ 1/Month
+~ |
+
+efficiency capacity = 1
+~ Dimensionless
+~ |
+
+service impact factor = 0.5
+~ Dimensionless
+~ |
+
+hiring_rate = staff count * 0.1
+~ People/Month
+~ |
+
+********************************************************
+.Control
+********************************************************~
+Simulation Control Parameters
+    |
+
+FINAL TIME = 24
+~ Month
+~ |
+
+INITIAL TIME  = 0
+~ Month
+~ |
+
+SAVEPER  = TIME STEP
+~ Month
+~ |
+
+TIME STEP  = 1
+~ Month
+~ |
